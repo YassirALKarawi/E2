@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>English Language 2 - Placement Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+* { -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none; }
+input,textarea { -webkit-user-select:text; -moz-user-select:text; -ms-user-select:text; user-select:text; }
+:root { --primary:#0a3d62; --primary-light:#1e6fa0; --accent:#e8a838; --danger:#c0392b; --success:#27ae60; --bg:#f0f2f5; --card:#fff; --text:#1a1a2e; --text-light:#5a6072; --border:#dfe4ea; --warning-bg:#fff3cd; --warning-border:#ffc107; --radius:14px; --shadow:0 4px 24px rgba(10,61,98,0.08); --shadow-lg:0 8px 40px rgba(10,61,98,0.12); }
+body { margin:0; padding:0; font-family:'Cairo',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; -webkit-touch-callout:none; }
+.container { max-width:640px; margin:0 auto; padding:16px; min-height:100vh; }
+.exam-header { background:linear-gradient(135deg,var(--primary),var(--primary-light)); color:#fff; padding:20px 24px; border-radius:var(--radius); margin-bottom:20px; box-shadow:var(--shadow-lg); text-align:center; }
+.exam-header h1 { margin:0 0 4px; font-size:1.3em; font-weight:800; }
+.exam-header p { margin:0; opacity:0.85; font-size:0.85em; }
+.card { background:var(--card); border-radius:var(--radius); padding:28px 24px; margin-bottom:16px; box-shadow:var(--shadow); border:1px solid var(--border); animation:fadeUp .4s ease; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+.form-group { margin-bottom:18px; }
+.form-group label { display:block; font-weight:700; margin-bottom:6px; font-size:.95em; color:var(--primary); }
+.form-group input { width:100%; padding:12px 16px; border:2px solid var(--border); border-radius:10px; font-family:'Cairo',sans-serif; font-size:1em; box-sizing:border-box; transition:border-color .2s; }
+.form-group input:focus { outline:none; border-color:var(--primary-light); box-shadow:0 0 0 3px rgba(30,111,160,.12); }
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 32px; border:none; border-radius:10px; font-family:'Cairo',sans-serif; font-size:1em; font-weight:700; cursor:pointer; width:100%; transition:all .2s; }
+.btn-primary { background:linear-gradient(135deg,var(--primary),var(--primary-light)); color:#fff; box-shadow:0 4px 16px rgba(10,61,98,.25); }
+.btn-primary:hover { transform:translateY(-1px); }
+.btn-primary:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+.btn-danger { background:var(--danger); color:#fff; }
+.btn-outline { background:transparent; border:2px solid var(--primary); color:var(--primary); }
+.timer-bar { position:sticky; top:0; z-index:100; background:var(--card); border-radius:0 0 var(--radius) var(--radius); padding:10px 20px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 12px rgba(0,0,0,.08); margin:-16px -16px 16px; border-bottom:3px solid var(--primary); }
+.timer-display { font-family:'JetBrains Mono',monospace; font-size:1.4em; font-weight:600; color:var(--primary); direction:ltr; }
+.timer-display.warning { color:var(--danger); animation:pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+.progress-info { font-size:.85em; color:var(--text-light); font-weight:600; }
+.question-card { background:var(--card); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); border:1px solid var(--border); margin-bottom:16px; animation:fadeUp .3s ease; }
+.question-number { display:inline-block; background:var(--primary); color:#fff; padding:4px 14px; border-radius:20px; font-size:.8em; font-weight:700; margin-bottom:12px; }
+.question-unit { display:inline-block; padding:3px 10px; border-radius:20px; font-size:.7em; font-weight:700; margin-right:6px; }
+.question-text { font-size:1.05em; font-weight:600; line-height:1.7; margin-bottom:16px; direction:ltr; text-align:left; }
+.options-list { list-style:none; padding:0; margin:0; }
+.option-item { margin-bottom:8px; }
+.option-label { display:flex; align-items:center; gap:12px; padding:12px 16px; border:2px solid var(--border); border-radius:10px; cursor:pointer; transition:all .2s; direction:ltr; text-align:left; }
+.option-label:hover { border-color:var(--primary-light); background:rgba(30,111,160,.04); }
+.option-label.selected { border-color:var(--primary); background:rgba(30,111,160,.08); }
+.option-radio { width:20px; height:20px; border:2px solid var(--border); border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+.option-label.selected .option-radio { border-color:var(--primary); background:var(--primary); }
+.option-label.selected .option-radio::after { content:''; width:8px; height:8px; background:#fff; border-radius:50%; }
+.option-text { font-size:.95em; flex:1; }
+.nav-buttons { display:flex; gap:10px; margin-top:12px; }
+.nav-buttons .btn { flex:1; padding:12px 16px; font-size:.9em; }
+.question-map { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin:16px 0; }
+.q-dot { width:100%; aspect-ratio:1; border-radius:8px; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:.75em; font-weight:700; cursor:pointer; font-family:'JetBrains Mono',monospace; transition:all .2s; }
+.q-dot.answered { background:var(--success); color:#fff; border-color:var(--success); }
+.q-dot.current { border-color:var(--primary); background:rgba(30,111,160,.1); color:var(--primary); }
+.reading-box { background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:18px; margin-bottom:16px; font-size:.92em; line-height:1.9; direction:ltr; text-align:left; color:#334155; border-left:4px solid var(--primary); }
+.reading-box b { color:var(--primary); }
+.warning-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.85); z-index:9999; align-items:center; justify-content:center; padding:20px; }
+.warning-overlay.show { display:flex; }
+.warning-box { background:#fff; border-radius:var(--radius); padding:32px 24px; text-align:center; max-width:420px; width:100%; max-height:85vh; overflow-y:auto; }
+.warning-icon { font-size:3em; margin-bottom:12px; }
+.warning-box h2 { color:var(--danger); margin:0 0 12px; }
+.warning-box p { color:var(--text-light); margin:0 0 20px; line-height:1.6; }
+.violation-badge { position:fixed; top:60px; left:50%; transform:translateX(-50%); background:var(--danger); color:#fff; padding:8px 20px; border-radius:20px; font-size:.85em; font-weight:700; z-index:200; display:none; }
+.result-page { animation:fadeUp .5s ease; }
+.result-hero { text-align:center; padding:20px 0; }
+.result-emoji { font-size:4em; margin-bottom:8px; animation:bounceIn .6s ease; }
+@keyframes bounceIn { 0%{transform:scale(0)} 50%{transform:scale(1.2)} 100%{transform:scale(1)} }
+.result-circle { width:180px; height:180px; border-radius:50%; margin:0 auto 16px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-weight:800; border:8px solid; }
+.result-score-big { font-size:3.2em; line-height:1; font-family:'JetBrains Mono',monospace; }
+.result-total { font-size:1em; opacity:.7; }
+.result-pct { font-size:1.8em; font-weight:800; margin:8px 0 4px; }
+.result-label { font-size:1.3em; font-weight:800; padding:8px 28px; border-radius:30px; display:inline-block; margin:8px 0 4px; }
+.level-tag { display:inline-block; padding:6px 22px; border-radius:20px; font-weight:700; font-size:.95em; margin-bottom:6px; direction:ltr; letter-spacing:.5px; }
+.level-desc { font-size:.85em; color:var(--text-light); line-height:1.7; max-width:420px; margin:4px auto 10px; direction:ltr; text-align:center; }
+.result-stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0; }
+.stat-box { background:var(--bg); padding:16px; border-radius:12px; text-align:center; }
+.stat-value { font-size:1.4em; font-weight:800; color:var(--primary); font-family:'JetBrains Mono',monospace; }
+.stat-label { font-size:.78em; color:var(--text-light); margin-top:4px; }
+.submit-status { padding:14px 18px; border-radius:12px; font-weight:700; font-size:.95em; margin:16px 0; display:flex; align-items:center; gap:10px; justify-content:center; }
+.submit-status.sending { background:#e3f2fd; color:#1565c0; border:1px solid #90caf9; }
+.submit-status.success { background:rgba(39,174,96,.1); color:var(--success); border:2px solid var(--success); }
+.submit-status.error { background:rgba(192,57,43,.1); color:var(--danger); border:2px solid var(--danger); }
+.spinner { width:22px; height:22px; border:3px solid #90caf9; border-top-color:#1565c0; border-radius:50%; animation:spin .8s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.backup-section { background:var(--bg); border-radius:10px; padding:16px; margin-top:16px; }
+.backup-code { background:#fff; border:1px solid var(--border); border-radius:8px; padding:10px; font-family:'JetBrains Mono',monospace; font-size:.6em; word-break:break-all; max-height:80px; overflow-y:auto; direction:ltr; text-align:left; -webkit-user-select:text; user-select:text; }
+.close-msg { margin-top:20px; padding:16px; background:rgba(30,111,160,.06); border-radius:12px; text-align:center; color:var(--text-light); font-size:.9em; line-height:1.7; }
+.rules-list { list-style:none; padding:0; margin:0; }
+.rules-list li { padding:10px 0; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:10px; font-size:.92em; line-height:1.6; }
+.rules-list li:last-child { border-bottom:none; }
+.rule-icon { font-size:1.2em; flex-shrink:0; margin-top:2px; }
+.checkbox-label { display:flex; align-items:center; gap:10px; padding:14px; background:var(--warning-bg); border:1px solid var(--warning-border); border-radius:10px; cursor:pointer; margin-top:16px; font-weight:600; font-size:.9em; }
+.checkbox-label input { width:18px; height:18px; }
+.student-dropdown { position:absolute; top:100%; left:0; right:0; background:var(--card); border:2px solid var(--primary-light); border-radius:0 0 10px 10px; max-height:220px; overflow-y:auto; z-index:50; box-shadow:0 8px 24px rgba(0,0,0,.12); }
+.dd-item { padding:10px 14px; cursor:pointer; font-size:.95em; border-bottom:1px solid var(--border); direction:rtl; text-align:right; }
+.dd-item:hover { background:rgba(30,111,160,.08); }
+.dd-item.admin-item { color:var(--primary); font-weight:700; background:rgba(232,168,56,.08); }
+.dd-no-result { padding:12px; text-align:center; color:var(--text-light); font-size:.85em; }
+.selected-name-display { margin-top:8px; padding:10px 14px; background:rgba(39,174,96,.08); border:1px solid var(--success); border-radius:8px; color:var(--success); font-weight:700; display:flex; align-items:center; justify-content:space-between; direction:rtl; }
+.selected-name-display .clear-btn { background:none; border:none; color:var(--danger); cursor:pointer; font-size:1.1em; }
+.hidden { display:none !important; }
+@media(max-width:480px) { .container{padding:10px} .card,.question-card{padding:20px 16px} .exam-header{padding:16px 18px} .exam-header h1{font-size:1.15em} .result-circle{width:150px;height:150px} .result-score-big{font-size:2.6em} }
+</style>
+</head>
+<body>
+<div class="violation-badge" id="violationBadge"></div>
+<div class="warning-overlay" id="warningOverlay"><div class="warning-box"><div class="warning-icon">⚠️</div><h2>تحذير!</h2><p id="warningText"></p><button class="btn btn-danger" onclick="dismissWarning()">فهمت، العودة للاختبار</button></div></div>
+<div class="container">
+
+  <!-- ========== SCREEN 1: REGISTER ========== -->
+  <div id="screen-register">
+    <div class="exam-header"><h1>University of Diyala — College of Engineering</h1><p>English Language 2 — Placement Quiz</p></div>
+    <div class="card">
+      <h2 style="margin:0 0 4px;color:var(--primary)">📝 اختبار تحديد المستوى</h2>
+      <p style="margin:0 0 20px;color:var(--text-light);font-size:.9em">المحاضرة الأولى | د. ياسر الأمين</p>
+      <div class="form-group"><label>اختر اسمك من القائمة</label><div style="position:relative"><input type="text" id="studentSearch" placeholder="🔍 ابحث عن اسمك..." autocomplete="off" oninput="filterStudents()" onfocus="showDropdown()" style="direction:rtl;text-align:right"><div id="studentDropdown" class="student-dropdown hidden"></div></div><input type="hidden" id="studentName"><div id="selectedNameDisplay" class="selected-name-display hidden"></div></div>
+      <div class="form-group"><label>رقم الهاتف</label><input type="tel" id="studentPhone" placeholder="07XXXXXXXXX" autocomplete="off" maxlength="11" style="direction:ltr;text-align:left"></div>
+      <button class="btn btn-primary" onclick="goToInstructions()">التالي ←</button>
+    </div>
+  </div>
+
+  <!-- ========== SCREEN 2: INSTRUCTIONS ========== -->
+  <div id="screen-instructions" class="hidden">
+    <div class="exam-header"><h1>تعليمات الاختبار</h1><p>اقرأ التعليمات بعناية قبل البدء</p></div>
+    <div class="card">
+      <ul class="rules-list">
+        <li><span class="rule-icon">🎯</span>هذا اختبار <strong>تحديد مستوى فقط</strong> — لا يؤثر على درجاتك النهائية</li>
+        <li><span class="rule-icon">⏱️</span>مدة الاختبار <strong>20 دقيقة</strong> — ينتهي تلقائياً عند انتهاء الوقت</li>
+        <li><span class="rule-icon">📝</span><strong>20 سؤال</strong> اختيار من متعدد (قواعد، مفردات، قراءة، تراكيب)</li>
+        <li><span class="rule-icon">📊</span>سيتم تحديد مستواك تلقائياً: <strong>A1 → A2 → A2+ → B1 → B1+</strong></li>
+        <li><span class="rule-icon">🔀</span>الأسئلة مختلفة لكل طالب من بنك أسئلة كبير</li>
+        <li><span class="rule-icon">⚡</span>يمكنك التنقل بين الأسئلة والعودة لأي سؤال</li>
+        <li><span class="rule-icon">📤</span>عند الانتهاء تُرسل النتيجة تلقائياً للدكتور</li>
+        <li><span class="rule-icon">💡</span>أجب بصدق — <strong>الهدف معرفة مستواك الحقيقي لمساعدتك!</strong></li>
+      </ul>
+      <label class="checkbox-label"><input type="checkbox" id="agreeCheckbox"> أوافق وفهمت أن هذا اختبار تحديد مستوى</label>
+      <button class="btn btn-primary" style="margin-top:16px" onclick="startQuiz()" id="startBtn" disabled>ابدأ الاختبار 🚀</button>
+    </div>
+  </div>
+
+  <!-- ========== SCREEN 3: QUIZ ========== -->
+  <div id="screen-quiz" class="hidden">
+    <div class="timer-bar"><div class="progress-info" id="progressInfo">1/20</div><div class="timer-display" id="timerDisplay">20:00</div></div>
+    <div class="question-map" id="questionMap"></div>
+    <div id="questionContainer"></div>
+    <div class="nav-buttons"><button class="btn btn-outline" id="prevBtn" onclick="prevQuestion()">→ السابق</button><button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">التالي ←</button></div>
+    <button class="btn btn-danger" style="margin-top:12px" onclick="confirmSubmit()">📩 إنهاء وتسليم الاختبار</button>
+  </div>
+
+  <!-- ========== SCREEN 4: RESULTS ========== -->
+  <div id="screen-results" class="hidden">
+    <div class="result-page">
+      <div id="sendingState">
+        <div class="exam-header"><h1>جاري تسليم الاختبار...</h1><p>الرجاء الانتظار وعدم إغلاق الصفحة</p></div>
+        <div class="card" style="text-align:center;padding:40px 24px"><div class="submit-status sending"><div class="spinner"></div>جاري إرسال النتيجة للدكتور...</div><p style="color:var(--text-light);font-size:.85em;margin-top:12px">يرجى الانتظار بضع ثوانٍ ⏳</p></div>
+      </div>
+      <div id="successState" class="hidden">
+        <div class="exam-header" id="successHeader"><h1>✅ تم تسليم الاختبار بنجاح!</h1><p>English Language 2 — Placement Quiz — Dr. Yassir AL-Ameen</p></div>
+        <div class="card" style="text-align:center;padding:30px 24px">
+          <div class="result-hero">
+            <div class="result-emoji" id="resultEmoji">📊</div>
+            <div class="result-circle" id="resultCircle"><div class="result-score-big" id="resultScore">0</div><div class="result-total" id="resultTotal">/ 20</div></div>
+            <div class="result-pct" id="resultPct">0%</div>
+            <div class="level-tag" id="levelTag">—</div>
+            <div class="result-label" id="resultLabel">—</div>
+            <div class="level-desc" id="levelDesc"></div>
+          </div>
+          <div class="submit-status success">✅ تم إرسال نتيجتك بنجاح للدكتور</div>
+          <div class="result-stats">
+            <div class="stat-box"><div class="stat-value" id="statCorrect">0</div><div class="stat-label">✅ إجابات صحيحة</div></div>
+            <div class="stat-box"><div class="stat-value" id="statWrong">0</div><div class="stat-label">❌ إجابات خاطئة</div></div>
+            <div class="stat-box"><div class="stat-value" id="statTime">00:00</div><div class="stat-label">⏱️ الوقت المستغرق</div></div>
+            <div class="stat-box"><div class="stat-value" id="statUnanswered">0</div><div class="stat-label">❓ بدون إجابة</div></div>
+          </div>
+          <div class="close-msg">🎓 يمكنك إغلاق هذه الصفحة الآن<br><strong>بالتوفيق في هذا الكورس!</strong></div>
+        </div>
+      </div>
+      <div id="errorState" class="hidden">
+        <div class="exam-header" style="background:linear-gradient(135deg,var(--danger),#e74c3c)"><h1>⚠️ تعذّر الإرسال التلقائي</h1><p>أرسل الكود الاحتياطي للدكتور</p></div>
+        <div class="card" style="text-align:center;padding:30px 24px">
+          <div class="result-hero">
+            <div class="result-circle" id="resultCircle2"><div class="result-score-big" id="resultScore2">0</div><div class="result-total">/ 20</div></div>
+            <div class="result-pct" id="resultPct2">0%</div>
+            <div class="result-label" id="resultLabel2">—</div>
+          </div>
+          <div class="submit-status error">⚠️ لم يتم الإرسال — استخدم الكود أدناه</div>
+          <div class="result-stats"><div class="stat-box"><div class="stat-value" id="statCorrect2">0</div><div class="stat-label">صحيحة</div></div><div class="stat-box"><div class="stat-value" id="statTime2">00:00</div><div class="stat-label">الوقت</div></div></div>
+          <button class="btn btn-primary" onclick="retrySend()" style="margin-top:12px">🔄 إعادة المحاولة</button>
+          <div class="backup-section"><p style="font-weight:700;color:var(--primary);margin:0 0 8px">📋 الخطة البديلة:</p><p style="color:var(--text-light);font-size:.82em;margin:0 0 8px">انسخ الكود وأرسله للدكتور في كروب الواتساب</p><div class="backup-code" id="backupCode"></div><button class="btn btn-outline" onclick="copyBackupCode()" style="margin-top:8px;font-size:.85em" id="copyBtn">📋 نسخ الكود</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ================================================================
+//  ⚙️  CONFIGURATION
+// ================================================================
+const GOOGLE_SHEET_URL="https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec";
+const QUIZ_DURATION_MINUTES=20;
+const QUIZ_TITLE="EL2 Placement Quiz";
+const Q_PER_SECTION=5; // 5 questions per section = 20 total
+
+// ================================================================
+//  👥  STUDENT LIST
+// ================================================================
+const STUDENT_LIST=[
+"🔑 Admin (Dr. Yassir)",
+"أحمد عادل جميل عبد الله",
+"أحمد وليد عبود جاسم",
+"أطمئنان كريم موسى ربيع",
+"أمير قاسم عبدالامير جواد",
+"تارة ظاهر بدر يوسف",
+"حسين حاتم عبد الكريم صالح",
+"حوراء مصطفى رشيد أحمد",
+"رؤى نشوان جعفر عباس",
+"زهراء زيد علي صالح",
+"زهراء عمار صادق كريم",
+"زينب باسم هاشم نجم",
+"زينب رشيد هادي محمد",
+"سارة جبار حسين عباس",
+"سارة نوار محمود عليوي",
+"سجى مهدي صالح خماس",
+"شهد طالب ذياب علوان",
+"شهد واثق قحطان محمد",
+"صفاء عدنان عبدالله خميس",
+"ضحى رياض حميد حسن",
+"عبدالسلام إبراهيم محمود",
+"عبد الله حسن هادي جواد",
+"عبد الله عباس عيدان شاهين",
+"غفران عثمان إبراهيم يعقوب",
+"فاطمة عبدالمنعم احمد محمد",
+"كوثر اسعيد احمد ساطي",
+"كوثر حسين علي حسين",
+"محمد رعد حسب الله عبد",
+"محمد وسام سلمان",
+"مريم محمد صالح ابراهيم",
+"مصطفى وائل كامل"
+];
+
+// ================================================================
+//  📖  TWO READING PASSAGES (each with 5 questions)
+// ================================================================
+const PASSAGES=[
+{
+id:"A",
+title:"The Birth of Mobile Communication",
+text:'The first mobile phone call was made on April 3, 1973, by Martin Cooper, an engineer at Motorola. He called his rival at Bell Labs to tell him that he was speaking from a real handheld mobile phone. The phone weighed about 1.1 kilograms and was 23 centimetres long. The battery lasted only 20 minutes.<br><br>Today, smartphones are much lighter and more powerful. They can send messages, take photos, browse the internet, and control smart home devices. Over five billion people around the world now use mobile phones. Engineers are now developing 6G technology, which will be even faster than 5G and could support holographic calls in the future.',
+questions:[
+{id:21,sec:"Reading",psg:"A",text:"Who made the first mobile phone call?",options:["Alexander Graham Bell","Steve Jobs","Martin Cooper","Nikola Tesla"],correct:2},
+{id:22,sec:"Reading",psg:"A",text:"How heavy was the first mobile phone?",options:["About 100 grams","About 1.1 kilograms","About 5 kilograms","About 500 grams"],correct:1},
+{id:23,sec:"Reading",psg:"A",text:"How long did the battery of the first phone last?",options:["2 hours","1 hour","45 minutes","20 minutes"],correct:3},
+{id:24,sec:"Reading",psg:"A",text:"How many people use mobile phones today?",options:["Over 1 billion","Over 3 billion","Over 5 billion","Over 8 billion"],correct:2},
+{id:25,sec:"Reading",psg:"A",text:"What technology are engineers developing now?",options:["3G","4G","5G","6G"],correct:3}
+]
+},
+{
+id:"B",
+title:"How the Internet Works",
+text:'The internet is a global network that connects millions of computers around the world. When you open a website, your computer sends a request through your router to your Internet Service Provider (ISP). The ISP then sends the request to a DNS server, which finds the correct IP address of the website.<br><br>The data travels through undersea cables, satellites, and fibre optic lines. It is broken into small pieces called "packets." Each packet may take a different route to reach you, but they all arrive and are put back together on your screen. The whole process takes less than a second. Today, about 5.4 billion people use the internet, and the number is growing every year.',
+questions:[
+{id:26,sec:"Reading",psg:"B",text:"What does ISP stand for in the passage?",options:["Internet Security Program","Internet Service Provider","Internal System Protocol","Internet Speed Platform"],correct:1},
+{id:27,sec:"Reading",psg:"B",text:"What does a DNS server do?",options:["Blocks viruses","Finds the IP address of websites","Speeds up downloads","Stores your passwords"],correct:1},
+{id:28,sec:"Reading",psg:"B",text:"Data on the internet is broken into small pieces called ___.",options:["files","frames","packets","blocks"],correct:2},
+{id:29,sec:"Reading",psg:"B",text:"How do packets travel across oceans?",options:["Only by satellite","Through undersea cables, satellites, and fibre optic lines","By radio waves only","Through phone lines only"],correct:1},
+{id:30,sec:"Reading",psg:"B",text:"How many people use the internet today according to the passage?",options:["About 3 billion","About 4 billion","About 5.4 billion","About 7 billion"],correct:2}
+]
+}
+];
+
+// ================================================================
+//  📝  QUESTION BANK — 40 QUESTIONS (10 per section)
+// ================================================================
+const GRAMMAR_BANK=[
+{id:1,sec:"Grammar",text:"She ___ from Iraq. She lives in Baghdad.",options:["is","are","am","be"],correct:0},
+{id:2,sec:"Grammar",text:"I ___ to university every day by bus.",options:["go","goes","going","am go"],correct:0},
+{id:3,sec:"Grammar",text:"They ___ TV when the phone rang.",options:["watch","are watching","were watching","watched"],correct:2},
+{id:4,sec:"Grammar",text:"He has already ___ his homework.",options:["finished","finish","finishing","finishes"],correct:0},
+{id:5,sec:"Grammar",text:"You ___ turn off your phone in the lab. It is a rule.",options:["can","might","should","must"],correct:3},
+{id:6,sec:"Grammar",text:"The report ___ by the engineer yesterday.",options:["wrote","was written","is written","has written"],correct:1},
+{id:7,sec:"Grammar",text:"If it rains tomorrow, we ___ stay inside.",options:["would","were","will","are"],correct:2},
+{id:8,sec:"Grammar",text:"I have been studying English ___ three years.",options:["since","from","for","during"],correct:2},
+{id:9,sec:"Grammar",text:"She ___ to London twice. She knows it well.",options:["has been","went","is going","goes"],correct:0},
+{id:10,sec:"Grammar",text:"The students ___ their project next week.",options:["present","will present","presented","presenting"],correct:1}
+];
+
+const VOCAB_BANK=[
+{id:11,sec:"Vocabulary",text:"A ___ connects your computer to the internet.",options:["printer","scanner","router","speaker"],correct:2},
+{id:12,sec:"Vocabulary",text:"The signal was very weak, so the call kept ___.",options:["ringing","dropping","calling","sending"],correct:1},
+{id:13,sec:"Vocabulary",text:"An 'antenna' is used to ___ signals.",options:["cook","paint","send and receive","wash"],correct:2},
+{id:14,sec:"Vocabulary",text:"'Bandwidth' in telecommunications refers to ___.",options:["the weight of a cable","the amount of data transferred","the speed of a car","the colour of a screen"],correct:1},
+{id:15,sec:"Vocabulary",text:"A 'malfunction' means something ___.",options:["works perfectly","is brand new","is very expensive","is not working correctly"],correct:3},
+{id:16,sec:"Vocabulary",text:"To 'troubleshoot' means to ___.",options:["create new problems","find and fix problems","ignore errors","shut down the system"],correct:1},
+{id:17,sec:"Vocabulary",text:"A person who fixes electrical systems is called an ___.",options:["architect","accountant","electrician","pharmacist"],correct:2},
+{id:18,sec:"Vocabulary",text:"The opposite of 'upload' is ___.",options:["reload","unload","download","offload"],correct:2},
+{id:19,sec:"Vocabulary",text:"'Deadline' means the ___.",options:["start of a project","middle of a task","last date to finish","first meeting"],correct:2},
+{id:20,sec:"Vocabulary",text:"The word 'reliable' means something you can ___.",options:["break easily","forget","depend on","throw away"],correct:2}
+];
+
+const STRUCTURE_BANK=[
+{id:31,sec:"Structure",text:"Choose the correct sentence:",options:["English important is for engineers.","English is important for engineers.","Important English is for engineers.","For engineers English important is."],correct:1},
+{id:32,sec:"Structure",text:"Choose the correct sentence:",options:["Yesterday went I to the lab.","I yesterday to the lab went.","I went to the lab yesterday.","To the lab yesterday I went."],correct:2},
+{id:33,sec:"Structure",text:"Choose the correct sentence:",options:["She doesn't like coffee.","She don't likes coffee.","She not like coffee.","She doesn't likes coffee."],correct:0},
+{id:34,sec:"Structure",text:"Choose the correct sentence:",options:["Where does he work?","Where he does work?","Where does he works?","Where work does he?"],correct:0},
+{id:35,sec:"Structure",text:"Choose the correct sentence:",options:["The network is faster much than before.","The network is much faster than before.","Much the network is faster than before.","The network than before is much faster."],correct:1},
+{id:36,sec:"Structure",text:"Choose the correct sentence:",options:["He can speaks three languages.","He can speak three languages.","He can speaking three languages.","He cans speak three languages."],correct:1},
+{id:37,sec:"Structure",text:"Choose the correct sentence:",options:["There is many students in the class.","There are many students in the class.","There many students are in the class.","Many students there are in the class."],correct:1},
+{id:38,sec:"Structure",text:"Choose the correct sentence:",options:["I have not seen never this movie.","I have never seen this movie.","Never I have seen this movie.","I never have seen this movie."],correct:1},
+{id:39,sec:"Structure",text:"Choose the correct sentence:",options:["The engineer which designed the bridge is famous.","The engineer who designed the bridge is famous.","The engineer designed who the bridge is famous.","Who the engineer designed the bridge is famous."],correct:1},
+{id:40,sec:"Structure",text:"Choose the correct sentence:",options:["She told me that she is busy.","She told me that she was busy.","She told me that she were busy.","She told to me that she was busy."],correct:1}
+];
+
+// ================================================================
+//  🔧  STATE
+// ================================================================
+let state={studentName:'',studentPhone:'',questions:[],answers:{},currentQ:0,timeLeft:QUIZ_DURATION_MINUTES*60,timerInterval:null,startTime:null,endTime:null,violations:0,violationLog:[],quizStarted:false,quizFinished:false,seed:0,resultData:null,encodedResult:'',passageId:''};
+
+// ================================================================
+//  🔧  UTILITIES
+// ================================================================
+function seededRandom(seed){let s=seed;return function(){s=(s*16807)%2147483647;return(s-1)/2147483646;};}
+function shuffleArray(a,r){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function hashString(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return Math.abs(h);}
+function formatTime(s){return Math.floor(s/60).toString().padStart(2,'0')+':'+((s%60).toString().padStart(2,'0'));}
+function encodeResults(d){return btoa(unescape(encodeURIComponent(JSON.stringify(d))));}
+
+// ================================================================
+//  👤  STUDENT DROPDOWN
+// ================================================================
+function showDropdown(){filterStudents();document.getElementById('studentDropdown').classList.remove('hidden');}
+function filterStudents(){var s=document.getElementById('studentSearch').value.trim();var dd=document.getElementById('studentDropdown');dd.classList.remove('hidden');var norm=function(t){return t.replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي');};var f=s.length===0?STUDENT_LIST:STUDENT_LIST.filter(function(n){return norm(n).includes(norm(s));});if(!f.length){dd.innerHTML='<div class="dd-no-result">لا توجد نتائج</div>';return;}dd.innerHTML=f.map(function(n){return '<div class="dd-item '+(n.includes("Admin")?"admin-item":"")+'" onclick="selectStudent(\''+n.replace(/'/g,"\\'")+'\')">' + n + '</div>';}).join('');}
+function selectStudent(n){document.getElementById('studentName').value=n;document.getElementById('studentSearch').value='';document.getElementById('studentSearch').style.display='none';document.getElementById('studentDropdown').classList.add('hidden');var d=document.getElementById('selectedNameDisplay');d.classList.remove('hidden');d.innerHTML='<span>✅ '+n+'</span><button class="clear-btn" onclick="clearSelection()">✕</button>';}
+function clearSelection(){document.getElementById('studentName').value='';document.getElementById('studentSearch').value='';document.getElementById('studentSearch').style.display='block';document.getElementById('selectedNameDisplay').classList.add('hidden');}
+document.addEventListener('click',function(e){if(!e.target.closest('.form-group')){var dd=document.getElementById('studentDropdown');if(dd)dd.classList.add('hidden');}});
+
+// ================================================================
+//  📺  SCREENS
+// ================================================================
+function showScreen(id){document.querySelectorAll('[id^="screen-"]').forEach(function(el){el.classList.add('hidden');});document.getElementById(id).classList.remove('hidden');window.scrollTo(0,0);}
+function goToInstructions(){var n=document.getElementById('studentName').value.trim();var p=document.getElementById('studentPhone').value.trim();if(!n){alert('الرجاء اختيار اسمك من القائمة');return;}if(!p||p.length<10){alert('الرجاء إدخال رقم الهاتف بشكل صحيح');return;}state.studentName=n;state.studentPhone=p;state.seed=hashString(p+n);showScreen('screen-instructions');}
+document.getElementById('agreeCheckbox').addEventListener('change',function(){document.getElementById('startBtn').disabled=!this.checked;});
+
+// ================================================================
+//  🚀  START QUIZ — SELECT 20 FROM 40
+// ================================================================
+function startQuiz(){
+  if(!document.getElementById('agreeCheckbox').checked)return;
+  var r=seededRandom(state.seed);
+
+  // 1) Pick 5 random Grammar from 10
+  var grammar=shuffleArray(GRAMMAR_BANK,r).slice(0,Q_PER_SECTION);
+  // 2) Pick 5 random Vocabulary from 10
+  var vocab=shuffleArray(VOCAB_BANK,r).slice(0,Q_PER_SECTION);
+  // 3) Pick 1 random passage (A or B) → get its 5 questions
+  var psgIndex=Math.floor(r()*2); // 0 or 1
+  var chosenPassage=PASSAGES[psgIndex];
+  state.passageId=chosenPassage.id;
+  var reading=chosenPassage.questions.slice(); // all 5
+  // 4) Pick 5 random Structure from 10
+  var structure=shuffleArray(STRUCTURE_BANK,r).slice(0,Q_PER_SECTION);
+
+  // Shuffle within each section
+  grammar=shuffleArray(grammar,r);
+  vocab=shuffleArray(vocab,r);
+  // reading stays in order (passage-dependent)
+  structure=shuffleArray(structure,r);
+
+  // Combine: Grammar → Vocab → Reading → Structure
+  var ordered=[].concat(grammar,vocab,reading,structure);
+
+  // Shuffle options for each question
+  state.questions=ordered.map(function(q){
+    var opts=q.options.map(function(o,i){return{text:o,originalIndex:i};});
+    var so=shuffleArray(opts,r);
+    return Object.assign({},q,{shuffledOptions:so,correctShuffledIndex:so.findIndex(function(o){return o.originalIndex===q.correct;})});
+  });
+
+  state.quizStarted=true;state.startTime=new Date();
+  showScreen('screen-quiz');buildQuestionMap();renderQuestion(0);startTimer();activateAntiCheat();
+}
+
+// ================================================================
+//  ⏱️  TIMER
+// ================================================================
+function startTimer(){updateTimerDisplay();state.timerInterval=setInterval(function(){state.timeLeft--;updateTimerDisplay();if(state.timeLeft<=0){clearInterval(state.timerInterval);finishQuiz(true);}},1000);}
+function updateTimerDisplay(){var d=document.getElementById('timerDisplay');d.textContent=formatTime(state.timeLeft);if(state.timeLeft<=120)d.classList.add('warning');}
+
+// ================================================================
+//  🗺️  QUESTION MAP
+// ================================================================
+function buildQuestionMap(){var m=document.getElementById('questionMap');m.innerHTML='';state.questions.forEach(function(q,i){var d=document.createElement('div');d.className='q-dot'+(i===0?' current':'');d.textContent=i+1;d.onclick=function(){goToQuestion(i);};d.id='qdot-'+i;m.appendChild(d);});}
+function updateQuestionMap(){state.questions.forEach(function(q,i){var d=document.getElementById('qdot-'+i);d.className='q-dot';if(state.answers[i]!==undefined)d.classList.add('answered');if(i===state.currentQ)d.classList.add('current');});}
+
+// ================================================================
+//  ❓  RENDER QUESTION
+// ================================================================
+function renderQuestion(i){
+  state.currentQ=i;var q=state.questions[i];var s=state.answers[i];
+  var secColors={'Grammar':'background:#E8F0FE;color:#1A56DB','Vocabulary':'background:#FEF3C7;color:#92400E','Reading':'background:#F0FDF4;color:#166534','Structure':'background:#FDF2F8;color:#9D174D'};
+  var secStyle=secColors[q.sec]||'';
+  // Show reading passage
+  var passageHTML='';
+  if(q.sec==='Reading'){
+    var psg=PASSAGES.find(function(p){return p.id===state.passageId;});
+    var isFirstReading=true;
+    for(var k=0;k<i;k++){if(state.questions[k].sec==='Reading'){isFirstReading=false;break;}}
+    if(isFirstReading){
+      passageHTML='<div class="reading-box"><b>'+psg.title+'</b><br><br>'+psg.text+'</div>';
+    } else {
+      passageHTML='<div style="margin-bottom:10px;text-align:right"><a href="javascript:void(0)" onclick="showPassagePopup()" style="color:var(--primary);font-weight:700;font-size:.85em;text-decoration:none">📖 اضغط لعرض القطعة مرة أخرى</a></div>';
+    }
+  }
+  document.getElementById('questionContainer').innerHTML=passageHTML+'<div class="question-card"><div><span class="question-unit" style="'+secStyle+'">'+q.sec+'</span><span class="question-number">السؤال '+(i+1)+' / '+state.questions.length+'</span></div><div class="question-text">'+q.text+'</div><ul class="options-list">'+q.shuffledOptions.map(function(o,oi){return '<li class="option-item"><div class="option-label '+(s===oi?'selected':'')+'" onclick="selectOption('+i+','+oi+')"><div class="option-radio"></div><div class="option-text">'+o.text+'</div></div></li>';}).join('')+'</ul></div>';
+  document.getElementById('prevBtn').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('nextBtn').textContent=i===state.questions.length-1?'إنهاء ←':'التالي ←';
+  document.getElementById('progressInfo').textContent=(i+1)+' / '+state.questions.length;
+  updateQuestionMap();
+}
+
+function showPassagePopup(){
+  var psg=PASSAGES.find(function(p){return p.id===state.passageId;});
+  document.getElementById('warningText').innerHTML='<b>'+psg.title+'</b><br><br>'+psg.text;
+  var box=document.querySelector('#warningOverlay .warning-box');
+  box.querySelector('h2').textContent='📖 Reading Passage';box.querySelector('h2').style.color='var(--primary)';
+  box.querySelector('.warning-icon').textContent='📖';
+  box.querySelector('.btn').textContent='إغلاق';box.querySelector('.btn').className='btn btn-primary';
+  document.getElementById('warningOverlay').classList.add('show');
+}
+
+// ================================================================
+//  🖱️  INTERACTION
+// ================================================================
+function selectOption(qi,oi){state.answers[qi]=oi;renderQuestion(qi);}
+function nextQuestion(){if(state.currentQ<state.questions.length-1)renderQuestion(state.currentQ+1);else confirmSubmit();}
+function prevQuestion(){if(state.currentQ>0)renderQuestion(state.currentQ-1);}
+function goToQuestion(i){renderQuestion(i);}
+function confirmSubmit(){var un=state.questions.length-Object.keys(state.answers).length;var m='هل أنت متأكد من تسليم الاختبار؟';if(un>0)m='⚠️ لديك '+un+' سؤال بدون إجابة!\n\nهل أنت متأكد من التسليم؟';if(confirm(m))finishQuiz(false);}
+
+// ================================================================
+//  🏁  FINISH & CALCULATE
+// ================================================================
+function finishQuiz(timeUp){
+  if(state.quizFinished)return;state.quizFinished=true;state.endTime=new Date();
+  if(state.timerInterval)clearInterval(state.timerInterval);deactivateAntiCheat();
+  var sG=0,sV=0,sR=0,sS=0,correct=0;var ans=[];
+  state.questions.forEach(function(q,i){
+    var s=state.answers[i];var ok=s===q.correctShuffledIndex;
+    if(ok){correct++;if(q.sec==='Grammar')sG++;if(q.sec==='Vocabulary')sV++;if(q.sec==='Reading')sR++;if(q.sec==='Structure')sS++;}
+    ans.push({qId:q.id,section:q.sec,selected:s!==undefined?q.shuffledOptions[s].text:'N/A',correct:q.options[q.correct],isCorrect:ok});
+  });
+  var timeTaken=Math.floor((state.endTime-state.startTime)/1000);
+  var unanswered=state.questions.length-Object.keys(state.answers).length;
+  var pct=Math.round((correct/state.questions.length)*100);
+  var level,levelAr;
+  if(pct>=85){level='B1+';levelAr='متقدم';}
+  else if(pct>=70){level='B1';levelAr='جيد جداً';}
+  else if(pct>=55){level='A2+';levelAr='جيد';}
+  else if(pct>=35){level='A2';levelAr='مقبول';}
+  else{level='A1';levelAr='مبتدئ';}
+
+  state.resultData={v:2,quiz:QUIZ_TITLE,name:state.studentName,phone:state.studentPhone,score:correct,total:state.questions.length,pct:pct,grammar:sG+"/5",vocabulary:sV+"/5",reading:sR+"/5",structure:sS+"/5",passageUsed:state.passageId,level:level,levelAr:levelAr,time:timeTaken,timeUp:timeUp,violations:state.violations,vLog:state.violationLog.slice(0,10),unanswered:unanswered,ts:state.startTime.toISOString(),te:state.endTime.toISOString(),seed:state.seed,answers:ans};
+  state.encodedResult=encodeResults(state.resultData);
+  showScreen('screen-results');
+  if(timeUp)alert('⏰ انتهى الوقت! تم تسليم الاختبار تلقائياً.');
+  sendToGoogleSheet();
+}
+
+// ================================================================
+//  📤  GOOGLE SHEETS
+// ================================================================
+async function sendToGoogleSheet(){
+  document.getElementById('sendingState').classList.remove('hidden');document.getElementById('successState').classList.add('hidden');document.getElementById('errorState').classList.add('hidden');
+  var d=state.resultData;
+  var sheetData={timestamp:new Date().toISOString(),name:d.name,phone:d.phone,score:d.score,total:d.total,percentage:d.pct,level:d.level,level_ar:d.levelAr,grammar:d.grammar,vocabulary:d.vocabulary,reading:d.reading,structure:d.structure,passage_used:"Passage "+d.passageUsed,time_seconds:d.time,time_formatted:formatTime(d.time),violations:d.violations,unanswered:d.unanswered,time_up:d.timeUp?"Yes":"No",start_time:d.ts,end_time:d.te,encoded_backup:state.encodedResult,answers_json:JSON.stringify(d.answers)};
+  try{await fetch(GOOGLE_SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(sheetData)});await new Promise(function(r){setTimeout(r,2500);});showSuccessResult();}
+  catch(e){try{await new Promise(function(r){setTimeout(r,1500);});await fetch(GOOGLE_SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(sheetData)});await new Promise(function(r){setTimeout(r,2000);});showSuccessResult();}catch(e2){showErrorResult();}}
+}
+
+function showSuccessResult(){
+  var d=state.resultData;document.getElementById('sendingState').classList.add('hidden');document.getElementById('successState').classList.remove('hidden');
+  var lc,lbg;
+  if(d.pct>=85){lc='#166534';lbg='#DCFCE7';}else if(d.pct>=70){lc='#1E6B45';lbg='#E8F8EF';}else if(d.pct>=55){lc='#92610C';lbg='#FEF3C7';}else if(d.pct>=35){lc='#9A4B1C';lbg='#FFF1E6';}else{lc='#9F1239';lbg='#FFE4E6';}
+  var c=document.getElementById('resultCircle');c.style.borderColor=lc;c.style.color=lc;c.style.background=lbg;c.style.boxShadow='0 0 40px '+lc+'33';
+  document.getElementById('resultScore').textContent=d.score;
+  document.getElementById('resultPct').textContent=d.pct+'%';document.getElementById('resultPct').style.color=lc;
+  document.getElementById('resultEmoji').textContent=d.pct>=70?'🎉':d.pct>=55?'👍':d.pct>=35?'📚':'💪';
+  var lt=document.getElementById('levelTag');lt.textContent=d.level;lt.style.background=lbg;lt.style.color=lc;
+  var rl=document.getElementById('resultLabel');rl.textContent=d.levelAr;rl.style.background=lbg;rl.style.color=lc;
+  var descs={'B1+':'Excellent! Strong English skills. This course will refine your technical vocabulary.','B1':'Very good! Focus on technical vocabulary and complex grammar.','A2+':'Good start! Pay attention to grammar and vocabulary building.','A2':'Strengthen your basics. Focus on grammar and vocabulary. Practice daily!','A1':'Extra practice needed. Use resources and practice English every day!'};
+  document.getElementById('levelDesc').textContent=descs[d.level]||'';
+  document.getElementById('statCorrect').textContent=d.score;
+  document.getElementById('statWrong').textContent=(d.total-d.score-d.unanswered);
+  document.getElementById('statTime').textContent=formatTime(d.time);
+  document.getElementById('statUnanswered').textContent=d.unanswered;
+}
+function showErrorResult(){
+  var d=state.resultData;document.getElementById('sendingState').classList.add('hidden');document.getElementById('errorState').classList.remove('hidden');
+  var lc,lbg;if(d.pct>=55){lc='#166534';lbg='#DCFCE7';}else{lc='#9F1239';lbg='#FFE4E6';}
+  var c2=document.getElementById('resultCircle2');c2.style.borderColor=lc;c2.style.color=lc;c2.style.background=lbg;
+  document.getElementById('resultScore2').textContent=d.score;
+  document.getElementById('resultPct2').textContent=d.pct+'%';document.getElementById('resultPct2').style.color=lc;
+  document.getElementById('resultLabel2').textContent=d.level+' — '+d.levelAr;document.getElementById('resultLabel2').style.background=lbg;document.getElementById('resultLabel2').style.color=lc;
+  document.getElementById('statCorrect2').textContent=d.score;document.getElementById('statTime2').textContent=formatTime(d.time);
+  document.getElementById('backupCode').textContent=state.encodedResult;
+}
+function retrySend(){sendToGoogleSheet();}
+function copyBackupCode(){var c=state.encodedResult;if(navigator.clipboard){navigator.clipboard.writeText(c).then(function(){document.getElementById('copyBtn').textContent='✅ تم النسخ!';});}else{var t=document.createElement('textarea');t.value=c;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);document.getElementById('copyBtn').textContent='✅ تم النسخ!';}}
+
+// ================================================================
+//  🛡️  ANTI-CHEAT
+// ================================================================
+function activateAntiCheat(){document.addEventListener('visibilitychange',hVis);window.addEventListener('blur',hBlur);document.addEventListener('contextmenu',prev);document.addEventListener('copy',prev);document.addEventListener('paste',prev);document.addEventListener('cut',prev);document.addEventListener('keydown',hKey);document.addEventListener('keyup',hKeyUp);}
+function deactivateAntiCheat(){document.removeEventListener('visibilitychange',hVis);window.removeEventListener('blur',hBlur);document.removeEventListener('contextmenu',prev);document.removeEventListener('copy',prev);document.removeEventListener('paste',prev);document.removeEventListener('cut',prev);document.removeEventListener('keydown',hKey);document.removeEventListener('keyup',hKeyUp);}
+function hVis(){if(document.hidden&&state.quizStarted&&!state.quizFinished){recordViolation('tab_switch');showWarningMsg('تم رصد مغادرة صفحة الاختبار! هذه المحاولة مسجلة.');}}
+function hBlur(){if(state.quizStarted&&!state.quizFinished)setTimeout(function(){if(!document.hidden){recordViolation('app_switch');showWarningMsg('تم رصد الانتقال لتطبيق آخر!');}},300);}
+function prev(e){if(state.quizStarted&&!state.quizFinished){e.preventDefault();return false;}}
+function hKey(e){if(!state.quizStarted||state.quizFinished)return;if(e.ctrlKey||e.metaKey){if(['c','v','a','p','s','u'].indexOf(e.key.toLowerCase())>=0){e.preventDefault();return false;}}if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')){e.preventDefault();recordViolation('devtools');return false;}}
+function hKeyUp(e){if(e.key==='PrintScreen'&&state.quizStarted&&!state.quizFinished)recordViolation('screenshot');}
+function recordViolation(t){state.violations++;state.violationLog.push({type:t,time:new Date().toISOString(),qIndex:state.currentQ});var b=document.getElementById('violationBadge');b.style.display='block';b.textContent='⚠️ مخالفة رقم '+state.violations;setTimeout(function(){b.style.display='none';},3000);}
+function showWarningMsg(t){
+  document.getElementById('warningText').textContent=t;
+  var box=document.querySelector('#warningOverlay .warning-box');
+  box.querySelector('.warning-icon').textContent='⚠️';box.querySelector('h2').textContent='تحذير!';box.querySelector('h2').style.color='var(--danger)';
+  box.querySelector('.btn').textContent='فهمت، العودة للاختبار';box.querySelector('.btn').className='btn btn-danger';
+  document.getElementById('warningOverlay').classList.add('show');
+}
+function dismissWarning(){document.getElementById('warningOverlay').classList.remove('show');}
+history.pushState(null,null,location.href);window.addEventListener('popstate',function(){history.pushState(null,null,location.href);if(state.quizStarted&&!state.quizFinished){recordViolation('back_button');showWarningMsg('لا يمكنك الرجوع أثناء الاختبار!');}});
+window.addEventListener('beforeunload',function(e){if(state.quizStarted&&!state.quizFinished){e.preventDefault();e.returnValue='';return'';}});
+</script>
+</body>
+</html>
