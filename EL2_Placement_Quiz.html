@@ -196,7 +196,7 @@ body { margin:0; padding:0; font-family:'Cairo',sans-serif; background:var(--bg)
 // ================================================================
 //  ⚙️  CONFIGURATION
 // ================================================================
-const GOOGLE_SHEET_URL="https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec";
+const GOOGLE_SHEET_URL="https://script.google.com/macros/s/AKfycbxTWVnMkyd1J_ffvrbFbu6DJ5o_C4tDGa7KGi98GaaUazdlwkfwKDSr06JkhL-qwqMm1w/exec";
 const QUIZ_DURATION_MINUTES=20;
 const QUIZ_TITLE="EL2 Placement Quiz";
 const Q_PER_SECTION=5; // 5 questions per section = 20 total
@@ -472,8 +472,31 @@ async function sendToGoogleSheet(){
   document.getElementById('sendingState').classList.remove('hidden');document.getElementById('successState').classList.add('hidden');document.getElementById('errorState').classList.add('hidden');
   var d=state.resultData;
   var sheetData={timestamp:new Date().toISOString(),name:d.name,phone:d.phone,score:d.score,total:d.total,percentage:d.pct,level:d.level,level_ar:d.levelAr,grammar:d.grammar,vocabulary:d.vocabulary,reading:d.reading,structure:d.structure,passage_used:"Passage "+d.passageUsed,time_seconds:d.time,time_formatted:formatTime(d.time),violations:d.violations,unanswered:d.unanswered,time_up:d.timeUp?"Yes":"No",start_time:d.ts,end_time:d.te,encoded_backup:state.encodedResult,answers_json:JSON.stringify(d.answers)};
-  try{await fetch(GOOGLE_SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(sheetData)});await new Promise(function(r){setTimeout(r,2500);});showSuccessResult();}
-  catch(e){try{await new Promise(function(r){setTimeout(r,1500);});await fetch(GOOGLE_SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(sheetData)});await new Promise(function(r){setTimeout(r,2000);});showSuccessResult();}catch(e2){showErrorResult();}}
+  
+  // Method 1: GET request with URL params (most reliable for cross-origin)
+  try{
+    var params=Object.keys(sheetData).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(sheetData[k]);}).join('&');
+    var url=GOOGLE_SHEET_URL+'?'+params;
+    
+    // Try fetch first
+    try{
+      await fetch(url,{method:'GET',mode:'no-cors'});
+    }catch(e){}
+    
+    // Also try image beacon as backup
+    var img=new Image();
+    img.src=url;
+    
+    await new Promise(function(r){setTimeout(r,3000);});
+    showSuccessResult();
+  }catch(e){
+    // Method 2: POST fallback
+    try{
+      await fetch(GOOGLE_SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(sheetData)});
+      await new Promise(function(r){setTimeout(r,2500);});
+      showSuccessResult();
+    }catch(e2){showErrorResult();}
+  }
 }
 
 function showSuccessResult(){
