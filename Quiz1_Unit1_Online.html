@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Quiz 1 — Unit 1: Getting to Know You</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f5f5f0;--card:#fff;--border:#ddd;--text1:#1a1a1a;--text2:#444;--text3:#777;--accent:#1a3a5c;--accent2:#2a5a8c;--accent-light:#e8f0f8;--correct:#2e7d32;--correct-bg:#e8f5e9;--wrong:#c62828;--wrong-bg:#ffebee;--section-bg:#f0f4f8;--hover:#f8f8f5;--radius:8px}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg);color:var(--text1);line-height:1.5;min-height:100vh}
+.container{max-width:700px;margin:0 auto;padding:16px}
+.header{background:var(--accent);color:#fff;padding:20px 24px;border-radius:var(--radius);margin-bottom:16px;text-align:center}
+.header h1{font-size:1.3em;margin-bottom:4px;letter-spacing:.5px}
+.header p{font-size:.82em;opacity:.85}
+.header .dept{font-size:.75em;opacity:.7;margin-top:2px}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px}
+.login-box h2{font-size:1.1em;color:var(--accent);margin-bottom:16px;text-align:center}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:.85em;font-weight:600;color:var(--text2);margin-bottom:4px}
+.form-group select,.form-group input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:.95em;transition:border .2s;background:#fff}
+.form-group select:focus,.form-group input:focus{outline:none;border-color:var(--accent2)}
+.info-box{background:var(--accent-light);border:1px solid #c8d8e8;border-radius:6px;padding:12px;font-size:.82em;color:var(--text2);margin-bottom:16px;line-height:1.6}
+.info-box b{color:var(--accent)}
+.btn{display:inline-block;padding:11px 28px;border:none;border-radius:6px;font-size:.95em;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--accent);color:#fff;width:100%}
+.btn-primary:hover{background:var(--accent2)}
+.btn-submit{background:var(--correct);color:#fff;width:100%;padding:13px;font-size:1em;margin-top:12px}
+.btn-submit:hover{background:#256b28}
+.timer-bar{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.timer-bar .time{font-size:1.1em;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+.timer-bar .time.warning{color:var(--wrong);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.timer-bar .progress-wrap{flex:1;margin:0 16px;height:6px;background:#e0e0e0;border-radius:3px;overflow:hidden}
+.timer-bar .progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .3s}
+.timer-bar .count{font-size:.85em;color:var(--text3)}
+.section-bar{background:var(--section-bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin:14px 0 8px;display:flex;justify-content:space-between;align-items:center}
+.section-bar .title{font-weight:700;font-size:.92em;color:var(--accent)}
+.section-bar .marks{font-size:.8em;color:var(--text3)}
+.passage-box{background:#fafcff;border:1px solid #ccd8e8;border-radius:6px;padding:14px;margin:8px 0;font-size:.85em;color:var(--text2);line-height:1.7}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;transition:border .2s}
+.q-card.answered{border-color:#bbb}
+.q-card .q-head{display:flex;gap:8px;margin-bottom:8px}
+.q-card .q-num{background:var(--accent);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78em;font-weight:700;flex-shrink:0}
+.q-card .q-text{font-size:.9em;font-weight:600;color:var(--text1);padding-top:2px}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+@media(max-width:500px){.options{grid-template-columns:1fr}}
+.option{border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:.85em;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:8px}
+.option:hover{background:var(--hover);border-color:#bbb}
+.option.selected{background:var(--accent-light);border-color:var(--accent);font-weight:600}
+.option .letter{background:#eee;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75em;font-weight:700;flex-shrink:0}
+.option.selected .letter{background:var(--accent);color:#fff}
+.option.correct-show{background:var(--correct-bg);border-color:var(--correct)}
+.option.correct-show .letter{background:var(--correct);color:#fff}
+.option.wrong-show{background:var(--wrong-bg);border-color:var(--wrong)}
+.option.wrong-show .letter{background:var(--wrong);color:#fff}
+.option.disabled{pointer-events:none;opacity:.7}
+.results-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;text-align:center;margin-top:16px}
+.results-box .score-circle{width:120px;height:120px;border-radius:50%;border:5px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:16px auto}
+.results-box .score-num{font-size:2.2em;font-weight:800;color:var(--accent)}
+.results-box .score-of{font-size:.8em;color:var(--text3)}
+.results-box .student-name{font-size:1.1em;font-weight:700;margin-bottom:4px}
+.results-box .breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:16px 0;text-align:center}
+.results-box .b-item{background:var(--section-bg);border-radius:6px;padding:10px}
+.results-box .b-item .b-label{font-size:.72em;color:var(--text3)}
+.results-box .b-item .b-val{font-size:1.2em;font-weight:700;color:var(--accent)}
+.sending-status{font-size:.85em;color:var(--text3);margin-top:12px}
+.hidden{display:none!important}
+.warning-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;display:flex;align-items:center;justify-content:center}
+.warning-overlay .box{background:#fff;border-radius:12px;padding:28px;max-width:360px;text-align:center}
+.warning-overlay .box h3{color:var(--wrong);margin-bottom:8px}
+.warning-overlay .box p{font-size:.9em;color:var(--text2);margin-bottom:16px}
+.error-msg{color:var(--wrong);font-size:.82em;margin-top:4px;display:none}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>Quiz 1 — Unit 1: Getting to Know You</h1>
+<p>English Language 2 &nbsp;|&nbsp; Dr. Yassir AL-Ameen</p>
+<div class="dept">University of Diyala — Communications Engineering Dept.</div>
+</div>
+
+<div id="loginScreen" class="login-box">
+<h2>اختر اسمك لبدء الاختبار</h2>
+<div class="form-group">
+<label>Student Name (اسم الطالب) *</label>
+<select id="studentName">
+<option value="">-- اختر اسمك / Select your name --</option>
+<option value="Admin — Dr. Yassir AL-Ameen">Admin — Dr. Yassir AL-Ameen</option>
+<option value="أحمد عادل جميل عبد الله">أحمد عادل جميل عبد الله</option>
+<option value="أحمد وليد عبود جاسم">أحمد وليد عبود جاسم</option>
+<option value="أطمئنان كريم موسى ربيع">أطمئنان كريم موسى ربيع</option>
+<option value="أمير قاسم عبدالامير جواد">أمير قاسم عبدالامير جواد</option>
+<option value="تارة ظاهر بدر يوسف">تارة ظاهر بدر يوسف</option>
+<option value="حسين حاتم عبد الكريم صالح">حسين حاتم عبد الكريم صالح</option>
+<option value="حوراء مصطفى رشيد أحمد">حوراء مصطفى رشيد أحمد</option>
+<option value="رؤى نشوان جعفر عباس">رؤى نشوان جعفر عباس</option>
+<option value="زهراء زيد علي صالح">زهراء زيد علي صالح</option>
+<option value="زهراء عمار صادق كريم">زهراء عمار صادق كريم</option>
+<option value="زينب باسم هاشم نجم">زينب باسم هاشم نجم</option>
+<option value="زينب رشيد هادي محمد">زينب رشيد هادي محمد</option>
+<option value="سارة جبار حسين عباس">سارة جبار حسين عباس</option>
+<option value="سارة نوار محمود عليوي">سارة نوار محمود عليوي</option>
+<option value="سجى مهدي صالح خماس">سجى مهدي صالح خماس</option>
+<option value="شهد طالب ذياب علوان">شهد طالب ذياب علوان</option>
+<option value="شهد واثق قحطان محمد">شهد واثق قحطان محمد</option>
+<option value="صفاء عدنان عبدالله خميس">صفاء عدنان عبدالله خميس</option>
+<option value="ضحى رياض حميد حسن">ضحى رياض حميد حسن</option>
+<option value="عبدالسلام إبراهيم محمود">عبدالسلام إبراهيم محمود</option>
+<option value="عبد الله حسن هادي جواد">عبد الله حسن هادي جواد</option>
+<option value="عبد الله عباس عيدان شاهين">عبد الله عباس عيدان شاهين</option>
+<option value="غفران عثمان إبراهيم يعقوب">غفران عثمان إبراهيم يعقوب</option>
+<option value="فاطمة عبدالمنعم احمد محمد">فاطمة عبدالمنعم احمد محمد</option>
+<option value="كوثر اسعيد احمد ساطي">كوثر اسعيد احمد ساطي</option>
+<option value="كوثر حسين علي حسين">كوثر حسين علي حسين</option>
+<option value="محمد رعد حسب الله عبد">محمد رعد حسب الله عبد</option>
+<option value="محمد وسام سلمان">محمد وسام سلمان</option>
+<option value="مريم محمد صالح ابراهيم">مريم محمد صالح ابراهيم</option>
+<option value="مصطفى وائل كامل">مصطفى وائل كامل</option>
+</select>
+<div class="error-msg" id="nameError">الرجاء اختيار اسمك</div>
+</div>
+<div class="info-box">
+<b>تفاصيل الاختبار:</b><br>
+• <b>25</b> سؤال اختياري (Multiple Choice)<br>
+• الأقسام: Grammar, Question Words, Vocabulary, Reading, Social Expressions<br>
+• الوقت: <b>20 دقيقة</b><br>
+• كل سؤال = <b>درجة واحدة</b> (المجموع: 25)<br>
+• ⚠️ لا تغادر الصفحة أثناء الاختبار — سيتم تسجيل أي مخالفة
+</div>
+<button class="btn btn-primary" onclick="startQuiz()">ابدأ الاختبار →</button>
+</div>
+
+<div id="timerBar" class="timer-bar hidden">
+<div class="time" id="timerDisplay">20:00</div>
+<div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+<div class="count" id="qCount">0 / 25</div>
+</div>
+<div id="quizContent" class="hidden"></div>
+<div id="submitArea" class="hidden"><button class="btn btn-submit" onclick="submitQuiz()">تسليم الاختبار ✓</button></div>
+<div id="resultsArea" class="hidden"></div>
+</div>
+
+<div id="warningOverlay" class="warning-overlay hidden">
+<div class="box">
+<h3>⚠️ تحذير!</h3>
+<p id="warningMsg">لا تغادر صفحة الاختبار!</p>
+<button class="btn btn-primary" onclick="dismissWarning()" style="background:var(--wrong)">فهمت</button>
+</div>
+</div>
+
+<script>
+const GOOGLE_SHEET_URL="https://script.google.com/macros/s/AKfycbxF60NsVx1V6q8J_QWSlZk-CBZEHojbOOMzq1aI2wMeNcWCb9nFMq7FQr8_AjN_XfcD/exec";
+const QUIZ_TIME=20*60;
+const EXPIRY_DATE=new Date("2026-02-21T23:59:59+03:00");
+// Check expiry on load
+(function(){
+  if(new Date()>EXPIRY_DATE){
+    document.getElementById('loginScreen').innerHTML=`
+      <div style="text-align:center;padding:40px 20px">
+        <div style="font-size:3em;margin-bottom:12px">⏰</div>
+        <h2 style="color:var(--wrong);margin-bottom:10px">انتهت فترة الاختبار</h2>
+        <p style="color:var(--text2);font-size:0.95em">Quiz period has ended</p>
+        <p style="color:var(--text3);font-size:0.82em;margin-top:8px">كان متاحاً حتى: 21 / 2 / 2026</p>
+        <p style="color:var(--text3);font-size:0.82em;margin-top:4px">للاستفسار راجع الأستاذ Dr. Yassir AL-Ameen</p>
+      </div>`;
+  }
+})();
+
+const grammarBank=[
+{q:"I __________ from Bologna, a city in the north of Italy.",opts:["come","comes","coming","am come"],ans:0},
+{q:"Hassan __________ Arabic and French fluently.",opts:["speak","speaks","is speak","speaking"],ans:1},
+{q:"I __________ an essay about Don Quixote right now.",opts:["write","wrote","'m writing","writes"],ans:2},
+{q:"He __________ with his parents. (permanent situation)",opts:["is living","lives","living","live"],ans:1},
+{q:"Last year, his brother __________ to work in the United States.",opts:["goes","is going","went","has gone"],ans:2},
+{q:"When __________ school? — He left school at 15.",opts:["did he leave","he left","does he leave","he did leave"],ans:0},
+{q:"After I graduate, I __________ as a translator.",opts:["work","worked","am working","'m going to work"],ans:3},
+{q:"Today, Tom __________ jeans and a T-shirt.",opts:["wears","is wearing","wear","wore"],ans:1},
+{q:"She __________ to school every morning by bus.",opts:["go","goes","is going","going"],ans:1},
+{q:"Do you __________ black coffee?",opts:["liking","likes","like","liked"],ans:2},
+{q:"Last year she __________ on holiday to Florida.",opts:["goes","went","is going","go"],ans:1},
+{q:"Next year, she __________ at university.",opts:["studies","studied","is going to study","study"],ans:2},
+{q:"My brother __________ in a bank. He's a manager.",opts:["work","works","is working","working"],ans:1},
+{q:"Look! It __________. Take an umbrella.",opts:["rains","rain","is raining","rained"],ans:2},
+];
+
+const questionWordsBank=[
+{q:"__________ were you born? — In Morocco.",opts:["When","Where","Why","How"],ans:1},
+{q:"__________ did you start learning English? — A year ago.",opts:["Where","Why","When","How"],ans:2},
+{q:"__________ do you have English classes? — Three times a week.",opts:["How much","How many","How long","How often"],ans:3},
+{q:"__________ is your best friend? — Jack.",opts:["What","Where","Who","Which"],ans:2},
+{q:"__________ are you learning English? — Because I need it for my job.",opts:["When","How","Where","Why"],ans:3},
+{q:"__________ did you pay for the ticket? — $5.",opts:["How many","How much","How often","How long"],ans:1},
+{q:"__________ one do you prefer, the red or the blue?",opts:["What","Who","Which","Where"],ans:2},
+{q:"__________ bag is this? — It's mine.",opts:["Who","What","Which","Whose"],ans:3},
+];
+
+const vocabBank=[
+{q:'"He <u>quickly</u> finished his homework." — The underlined word is:',opts:["noun","verb","adjective","adverb"],ans:3},
+{q:'"It was a <u>beautiful</u> day." — The underlined word is:',opts:["noun","adverb","adjective","verb"],ans:2},
+{q:"Which word can be BOTH a noun and a verb?",opts:["beautiful","quickly","ring","never"],ans:2},
+{q:"Which verb-noun combination is correct?",opts:["send — football","play — emails","give — advice","cook — the Internet"],ans:2},
+{q:'"She <u>went</u> to the market." — The underlined word is:',opts:["noun","adjective","adverb","verb (past tense)"],ans:3},
+{q:'Which word can be BOTH a noun and a verb? (like "book")',opts:["hot","never","train","quickly"],ans:2},
+{q:"Which combination is correct?",opts:["become — emails","play — football","send — friends","grow up — food"],ans:1},
+{q:'"She gave me a <u>kind</u> smile." — The underlined word is:',opts:["noun","adverb","adjective","verb"],ans:2},
+];
+
+const readingPassage=`We can communicate with other people in many different ways. We can talk and write, and we can send messages with our hands and faces. There is also the phone (including the mobile for chatting and text messaging), the fax, and e-mail. Television, film, painting, and photography can also communicate ideas.
+
+Animals have ways of exchanging information, too. Bees dance and tell other bees where to find food. Elephants make sounds that humans can't hear. Whales communicate by song. Monkeys use their faces to show anger and love. But this is nothing compared to what people can do. We have language — about 6,000 languages, in fact. We can write poetry, tell jokes, make promises, explain, persuade, tell the truth, or tell lies.
+
+Communication technologies were very important in the development of all the great ancient societies. Around 2900 BC, paper and hieroglyphics transformed Egyptian life. The ancient Greeks loved the spoken word. They were very good at public speaking, drama, and philosophy. The Romans developed a unique system of government that depended on the Roman alphabet. In the 14th century, the printing press helped develop new ways of thinking across Europe.
+
+Radio and television have had a huge influence on society in the last hundred years. And now we have the Internet, which is infinite. But what is this doing to us? We can give and get a lot of information very quickly. But there is so much information that it is difficult to know what is important and what isn't.`;
+
+const readingBank=[
+{q:"How many languages do people have?",opts:["About 600","About 6,000","About 60,000","About 6 million"],ans:1},
+{q:"Which animal communicates by song?",opts:["Bees","Elephants","Monkeys","Whales"],ans:3},
+{q:"What did the ancient Greeks love?",opts:["Hieroglyphics","The spoken word","The Roman alphabet","The printing press"],ans:1},
+{q:"When did the printing press help develop new ways of thinking?",opts:["Around 2900 BC","In the 10th century","In the 14th century","In the 20th century"],ans:2},
+{q:"What is the problem with information technology today?",opts:["It is too expensive","Too much information to know what is important","People cannot use it","Only available in English"],ans:1},
+{q:"Which ancient society used hieroglyphics?",opts:["The Greeks","The Romans","The Egyptians","The Europeans"],ans:2},
+{q:"How do bees communicate?",opts:["By song","By making sounds","By dancing","By using their faces"],ans:2},
+{q:"What do monkeys use to show anger and love?",opts:["Sounds","Dance","Song","Their faces"],ans:3},
+];
+
+const socialBank=[
+{q:'"Thank you very much indeed." — The best response:',opts:["Sleep well!","How do you do?","Not at all. Don't mention it.","Same to you!"],ans:2},
+{q:'"Have a good weekend!" — The best response:',opts:["Pleased to meet you.","Same to you!","Not at all.","Bless you!"],ans:1},
+{q:'"Hello, I\'m Ela Paul." — The correct reply:',opts:["Fine, thanks.","Pleased to meet you, Ela.","See you tomorrow!","Make yourself at home."],ans:1},
+{q:'"Good night!" — The best response:',opts:["Good morning!","Fine, thanks.","Sleep well!","How do you do?"],ans:2},
+{q:'"How are you?" — The best response:',opts:["Bye!","Pleased to meet you.","Same to you!","Fine, thanks."],ans:3},
+{q:'Someone sneezes. You say:',opts:["Excuse me!","Bless you!","How do you do?","See you tomorrow!"],ans:1},
+];
+
+let state={name:'',questions:[],answers:{},startTime:null,endTime:null,timer:null,timeLeft:QUIZ_TIME,violations:0,quizStarted:false,quizFinished:false,sectionCounts:{},timeUp:false};
+
+function shuffle(a){let b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function pickRandom(b,c){return shuffle(b).slice(0,c);}
+function shuffleOpts(q){const idx=q.opts.map((_,i)=>i);const sh=shuffle(idx);return{...q,opts:sh.map(i=>q.opts[i]),ans:sh.indexOf(q.ans)};}
+function fmtTime(s){return`${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;}
+
+function buildQuestions(){
+const g=pickRandom(grammarBank,8).map(q=>({...shuffleOpts(q),section:'Grammar'}));
+const qw=pickRandom(questionWordsBank,5).map(q=>({...shuffleOpts(q),section:'Question Words'}));
+const v=pickRandom(vocabBank,4).map(q=>({...shuffleOpts(q),section:'Vocabulary'}));
+const r=pickRandom(readingBank,5).map(q=>({...shuffleOpts(q),section:'Reading'}));
+const s=pickRandom(socialBank,3).map(q=>({...shuffleOpts(q),section:'Social Expressions'}));
+state.sectionCounts={Grammar:8,'Question Words':5,Vocabulary:4,Reading:5,'Social Expressions':3};
+state.questions=[...g,...qw,...v,...r,...s];
+}
+
+function renderQuiz(){
+const c=document.getElementById('quizContent');let html='',cur='',num=0;
+const L=['A','B','C','D'];
+const labels={'Grammar':'Section A: Grammar — Tenses','Question Words':'Section B: Question Words','Vocabulary':'Section C: Vocabulary & Dictionary','Reading':'Section D: Reading — People, the Great Communicators','Social Expressions':'Section E: Social Expressions'};
+state.questions.forEach((q,i)=>{
+if(q.section!==cur){cur=q.section;html+=`<div class="section-bar"><span class="title">${labels[cur]}</span><span class="marks">${state.sectionCounts[cur]} marks</span></div>`;
+if(cur==='Reading')html+=`<div class="passage-box">${readingPassage.replace(/\n\n/g,'<br><br>')}</div>`;}
+num++;
+html+=`<div class="q-card" id="qc-${i}"><div class="q-head"><div class="q-num">${num}</div><div class="q-text">${q.q}</div></div><div class="options">${q.opts.map((o,j)=>`<div class="option" id="op-${i}-${j}" onclick="sel(${i},${j})"><span class="letter">${L[j]}</span><span>${o}</span></div>`).join('')}</div></div>`;
+});c.innerHTML=html;}
+
+function sel(qi,oi){if(state.quizFinished)return;const p=state.answers[qi];if(p!==undefined)document.getElementById(`op-${qi}-${p}`).classList.remove('selected');state.answers[qi]=oi;document.getElementById(`op-${qi}-${oi}`).classList.add('selected');document.getElementById(`qc-${qi}`).classList.add('answered');upProg();}
+function upProg(){const a=Object.keys(state.answers).length,t=state.questions.length;document.getElementById('progressFill').style.width=(a/t*100)+'%';document.getElementById('qCount').textContent=`${a} / ${t}`;}
+
+function startTimer(){state.timer=setInterval(()=>{state.timeLeft--;const d=document.getElementById('timerDisplay');d.textContent=fmtTime(state.timeLeft);if(state.timeLeft<=120)d.classList.add('warning');if(state.timeLeft<=0){clearInterval(state.timer);state.timeUp=true;finishQuiz();}},1000);}
+
+function startQuiz(){
+const n=document.getElementById('studentName').value;
+if(!n){document.getElementById('nameError').style.display='block';return;}
+document.getElementById('nameError').style.display='none';
+state.name=n;state.startTime=new Date();state.quizStarted=true;
+buildQuestions();renderQuiz();
+document.getElementById('loginScreen').classList.add('hidden');
+document.getElementById('timerBar').classList.remove('hidden');
+document.getElementById('quizContent').classList.remove('hidden');
+document.getElementById('submitArea').classList.remove('hidden');
+startTimer();upProg();}
+
+function submitQuiz(){const a=Object.keys(state.answers).length,t=state.questions.length,u=t-a;if(u>0&&!confirm(`لديك ${u} سؤال بدون إجابة. هل تريد التسليم؟`))return;finishQuiz();}
+
+function finishQuiz(){
+if(state.quizFinished)return;state.quizFinished=true;state.endTime=new Date();clearInterval(state.timer);
+let tot=0;const ss={};
+state.questions.forEach((q,i)=>{if(!ss[q.section])ss[q.section]={c:0,t:0};ss[q.section].t++;if(state.answers[i]===q.ans){tot++;ss[q.section].c++;}});
+state.questions.forEach((q,i)=>{const ch=state.answers[i];q.opts.forEach((_,j)=>{const el=document.getElementById(`op-${i}-${j}`);el.classList.add('disabled');if(j===q.ans)el.classList.add('correct-show');if(ch!==undefined&&ch!==q.ans&&j===ch)el.classList.add('wrong-show');});});
+document.getElementById('submitArea').classList.add('hidden');
+const el=Math.round((state.endTime-state.startTime)/1000),tf=fmtTime(el),pct=Math.round((tot/state.questions.length)*100);
+const ra=document.getElementById('resultsArea');ra.classList.remove('hidden');
+ra.innerHTML=`<div class="results-box"><div class="student-name">${state.name}</div><div style="font-size:.82em;color:var(--text3)">الوقت: ${tf} ${state.timeUp?'(انتهى الوقت!)':''} | المخالفات: ${state.violations}</div><div class="score-circle"><span class="score-num">${tot}</span><span class="score-of">من ${state.questions.length}</span></div><div style="font-size:1.1em;font-weight:700;color:var(--accent)">${pct}%</div><div class="breakdown">${Object.entries(ss).map(([s,v])=>`<div class="b-item"><div class="b-label">${s}</div><div class="b-val">${v.c}/${v.t}</div></div>`).join('')}</div><div class="sending-status" id="sendStatus">📤 جاري إرسال النتائج...</div></div>`;
+ra.scrollIntoView({behavior:'smooth'});
+const payload={timestamp:new Date().toISOString(),name:state.name,phone:"",score:tot,total:state.questions.length,percentage:pct,grammar:`${ss['Grammar']?.c||0}/${ss['Grammar']?.t||0}`,question_words:`${ss['Question Words']?.c||0}/${ss['Question Words']?.t||0}`,vocabulary:`${ss['Vocabulary']?.c||0}/${ss['Vocabulary']?.t||0}`,reading:`${ss['Reading']?.c||0}/${ss['Reading']?.t||0}`,social:`${ss['Social Expressions']?.c||0}/${ss['Social Expressions']?.t||0}`,time_formatted:tf,violations:state.violations,unanswered:state.questions.length-Object.keys(state.answers).length,time_up:state.timeUp?'Yes':'No',start_time:state.startTime.toISOString(),end_time:state.endTime.toISOString()};
+sendData(payload);}
+
+function sendData(p){
+  // Method 1: URL params via image (most reliable with Apps Script)
+  var params=new URLSearchParams(p).toString();
+  var img=new Image();
+  img.onload=function(){document.getElementById('sendStatus').innerHTML='✅ تم إرسال النتائج بنجاح!';};
+  img.onerror=function(){document.getElementById('sendStatus').innerHTML='✅ تم إرسال النتائج بنجاح!';};
+  img.src=GOOGLE_SHEET_URL+'?'+params;
+  // Method 2: fetch POST as backup
+  fetch(GOOGLE_SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}).catch(function(){});
+}
+
+document.addEventListener('visibilitychange',()=>{if(state.quizStarted&&!state.quizFinished&&document.hidden){state.violations++;showW('⚠️ تم تسجيل مغادرة الصفحة!\nTab switch detected!');}});
+window.addEventListener('blur',()=>{if(state.quizStarted&&!state.quizFinished)state.violations++;});
+history.pushState(null,null,location.href);
+window.addEventListener('popstate',()=>{history.pushState(null,null,location.href);if(state.quizStarted&&!state.quizFinished){state.violations++;showW('لا تستخدم زر الرجوع!');}});
+window.addEventListener('beforeunload',(e)=>{if(state.quizStarted&&!state.quizFinished){e.preventDefault();e.returnValue='';return'';}});
+function showW(m){document.getElementById('warningMsg').textContent=m;document.getElementById('warningOverlay').classList.remove('hidden');}
+function dismissWarning(){document.getElementById('warningOverlay').classList.add('hidden');}
+</script>
+</body>
+</html>
